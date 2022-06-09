@@ -5,8 +5,9 @@ import cheerio from 'cheerio';
 import { createWorksheet, setColumn, setRow } from '../worksheet';
 import { request } from '../util';
 import { EHospitalName } from '../enum/EHospital';
+import IWooksheetDic from '../interface/IWooksheetDIc'
 
-const worksheetDic:any = {
+const worksheetDic: IWooksheetDic = {
   'https://www.pumch.cn/dsearchs/dockervisit/3/1.html?ajax=true': '普通门诊(东院)',
   'https://www.pumch.cn/dsearchs/dockervisit/3/2.html?ajax=true': '特需专家门诊(东院)',
   'https://www.pumch.cn/dsearchs/dockervisit/3/3.html?ajax=true': '国际医疗部门诊(东院)',

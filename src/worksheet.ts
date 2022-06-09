@@ -1,6 +1,12 @@
 import path from 'path';
 import fs from 'fs';
+import IWooksheetDic from './interface/IWooksheetDIc';
+import { hospitalName } from './interface/IHospital'
 const Excel = require('exceljs');
+
+interface IDataFn<T> {
+  (url: string, worksheet: any): T
+}
 
 /**
  * 创建、设置工作表相关
@@ -35,7 +41,11 @@ export function createWorkbook () {
  * @param hospitalName 医院名称
  * @returns 医院医生出诊信息二维数组
  */
-export async function createWorksheet (worksheetDic:any, dataFn:any, hospitalName: any) {
+export async function createWorksheet (
+  worksheetDic: IWooksheetDic,
+  dataFn: IDataFn<Promise<any>>,
+  hospitalName: hospitalName
+) {
   const workbook = createWorkbook();
   const promises = [];
   for (const url in worksheetDic) {
@@ -44,23 +54,27 @@ export async function createWorksheet (worksheetDic:any, dataFn:any, hospitalNam
     promises.push(dataFn(url, worksheet));
   }
   const result = await Promise.all(promises);
-  saveWookBook(workbook, hospitalName);
+  await saveWookBook(workbook, hospitalName);
   return result;
 }
 
 // 保存表格
 export function saveWookBook (workbook: any, filename: string) {
-  const dirpath = path.resolve(__dirname, '../files');
-  if (!fs.existsSync(dirpath)) {
-    fs.mkdirSync(dirpath);
-  }
-  const filepath = `${dirpath}/${filename}.xlsx`;
-  workbook.xlsx.writeFile(filepath, {
-    encoding: 'utf8'
-  }).then(() => {
-    console.log('保存成功');
-  }, (err:any) => {
-    console.log('保存失败', err);
+  return new Promise((resolve, reject) => {
+    const dirpath = path.resolve(__dirname, '../files');
+    if (!fs.existsSync(dirpath)) {
+      fs.mkdirSync(dirpath);
+    }
+    const filepath = `${dirpath}/${filename}.xlsx`;
+    workbook.xlsx.writeFile(filepath, {
+      encoding: 'utf8'
+    }).then(() => {
+      console.log('保存成功');
+      resolve(true);
+    }, (err:any) => {
+      console.log('保存失败', err);
+      reject(new Error());
+    });
   });
 }
 

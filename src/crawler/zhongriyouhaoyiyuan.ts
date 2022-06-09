@@ -4,6 +4,7 @@
 import { request } from '../util';
 import { EHospitalName } from '../enum/EHospital'
 import { createWorksheet, setColumn, setRow } from '../worksheet';
+import IWooksheetDic from '../interface/IWooksheetDIc'
 
 const periodDic:any = {
   1: '上午',
@@ -11,7 +12,7 @@ const periodDic:any = {
 };
 const zhongriUrl = 'https://www.zryhyy.com.cn/schedul_interface/scheduling/schedulDataByHosCode';
 
-const worksheetDic:any = {
+const worksheetDic: IWooksheetDic = {
   'https://www.zryhyy.com.cn/schedul_interface/scheduling/getDeptlist?hosCode=001': '本部',
   'https://www.zryhyy.com.cn/schedul_interface/scheduling/getDeptlist?hosCode=003': '北区',
   'https://www.zryhyy.com.cn/schedul_interface/scheduling/getDeptlist?hosCode=002': '西区',

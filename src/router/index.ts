@@ -36,10 +36,7 @@ router.get('/download', async (req, res) => {
   await creater(hospitalKey)();
   const filePath = path.resolve(__dirname, `../../files/${hospitalName}.xlsx`);
   const fileName = path.basename(filePath);
-  // 加一些延迟，否则下载的文件可能还未写入完成
-  setTimeout(() => {
-    res.download(filePath, fileName);
-  }, 300);
+  res.download(filePath, fileName);
 });
 
 export default router;
