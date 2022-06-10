@@ -20,6 +20,19 @@ export function request (url:string) {
   });
 }
 
+/**
+ * 判断两个日期是否是同一天
+ * @param dateA
+ * @param dateB
+ * @returns boolean
+ */
+export function isSameDay (dateA: Date, dateB: Date) {
+  const { getFullYear, getMonth, getDate } = Date.prototype
+  return [getFullYear, getMonth, getDate].every(fn => {
+    return fn.call(dateA) === fn.call(dateB)
+  })
+}
+
 const createrMap = {
   beijingxieheyiyuan: createBeijingxieheyiyuan,
   zhongriyouhaoyiyuan: createZhongriyouhaoyiyuan
