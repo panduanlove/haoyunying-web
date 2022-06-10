@@ -1,10 +1,16 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { EHospitalName, EHospitalDic } from '../src/enum/EHospital';
 import IHospital, { hospitalKey } from '../src/interface/IHospital';
-import { creater } from '../src/util';
+import { creater, isSameDay } from '../src/util';
 
 const router = express.Router();
+
+router.get('/index.html', (req, res) => {
+  res.status(200);
+  res.sendFile(path.resolve(__dirname, '../index.html'));
+});
 
 // 获取医院列表
 router.get('/hospitalList', (req, res) => {
@@ -37,10 +43,14 @@ router.get('/download', async (req, res) => {
       msg: '当前医院不存在！'
     });
   }
+  const filePath = path.resolve(__dirname, `../files/${hospitalName}.xlsx`);
+  const fileName = path.basename(filePath);
+  // 如果当前文件存在，并且是当天跑的脚本，直接导出
+  if (fs.existsSync(filePath) && isSameDay(fs.statSync(filePath).ctime, new Date())) {
+    return res.download(filePath, fileName);
+  }
   // 爬取数据，写入文件中
   await creater(hospitalKey)();
-  const filePath = path.resolve(__dirname, `../../files/${hospitalName}.xlsx`);
-  const fileName = path.basename(filePath);
   res.download(filePath, fileName);
 });
 

@@ -27,7 +27,7 @@ export function createWorkbook () {
       width: 200,
       height: 200,
       firstSheet: 0,
-      activeTab: 1,
+      activeTab: 0,
       visibility: 'visible'
     }
   ];

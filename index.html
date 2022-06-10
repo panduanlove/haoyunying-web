@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 先引入 Vue -->
+  <script src="https://i1.hdfimg.com/ssi/js/vue-2.5.16.min.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://i1.hdfimg.com/ssi/css/element-ui@2.12.0.css">
+  <!-- 引入组件库 -->
+  <script src="https://i1.hdfimg.com/ssi/js/element-ui@2.12.0.js"></script>
+  <script src="https://i2.hdfimg.com/ssi/js/axios.min.js"></script>
+  <link rel="stylesheet" href="https://i1.hdfimg.com/ssi/advicebackend/libs/css/reset.css?20190408">
+  <link rel="stylesheet" href="//i1.hdfimg.com/ssi/advicebackend/css/header.css?20211204">
+  <title>好运营</title>
+</head>
+<style>
+  html,body,#app{
+    height: 100%;
+  }
+  .box-card{
+    width:600px;
+    margin: 100px auto 0;
+    padding: 30px 100px;
+  }
+</style>
+<body>
+  <div id="app">
+    <header class="header">
+      <img src="//i1.hdfimg.com/ssi/advicebackend/image/niudefu_new.png" class="header-bio" alt="">
+      <p class="header-left">
+        <span class="header-title">好大夫在线---数据管理后台</span>
+        <span class="function-name">医生出诊信息导出</span>
+      </p>
+    </header>
+    <el-card class="box-card">
+      <el-select v-model="hospitalKey" filterable placeholder="请选择医院" style="width:400px;margin-right: 10px;">
+        <el-option
+          v-for="item in hospitalList"
+          :key="item.key"
+          :label="item.name"
+          :value="item.key">
+        </el-option>
+      </el-select>
+      <el-button
+        type="primary"
+        @click="exportData"
+        v-loading.fullscreen.lock="loading"
+        >导出出诊信息</el-button>
+    </el-card>
+  </div>
+</body>
+<script>
+  // eslint-disable-next-line
+  new Vue({
+    el: '#app',
+    data: () => {
+      return {
+        loading: false,
+        hospitalKey: '',
+        hospitalList: []
+      }
+    },
+    created () {
+      this.getHospitalList();
+    },
+    methods: {
+      getHospitalList () {
+        this.loading = true;
+        // eslint-disable-next-line
+        axios.get('/hospitalList').then(json => {
+          const res = json.data;
+          this.hospitalList = res.data;
+          this.loading = false;
+        }).catch(err => {
+          this.loading = false;
+          this.$message.error('获取医院列表失败' + err.message);
+        });
+      },
+      exportData () {
+        if (!this.hospitalKey) {
+          this.$message.error('请先选择医院！');
+          return;
+        }
+        window.open(`/download?hospitalKey=${this.hospitalKey}`, '_blank');
+      }
+    }
+  
+  });
+</script>
+</html>
