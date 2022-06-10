@@ -1,8 +1,8 @@
 import express from 'express';
 import path from 'path';
-import { EHospitalName, EHospitalDic } from '../enum/EHospital';
-import IHospital, { hospitalKey } from '../interface/IHospital';
-import { creater } from '../util';
+import { EHospitalName, EHospitalDic } from '../src/enum/EHospital';
+import IHospital, { hospitalKey } from '../src/interface/IHospital';
+import { creater } from '../src/util';
 
 const router = express.Router();
 
@@ -19,7 +19,12 @@ router.get('/hospitalList', (req, res) => {
       name: EHospitalName.中日友好医院
     }
   ];
-  res.json(hospitalList);
+  const result = {
+    errorCode: 0,
+    data: hospitalList,
+    msg: ''
+  }
+  res.json(result);
 });
 
 // 下载接口

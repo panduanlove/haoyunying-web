@@ -1,5 +1,5 @@
 import express from 'express';
-import router from './src/router';
+import router from './routers';
 const port = 8888;
 
 const app = express();
