@@ -28,12 +28,12 @@ export default function creater () {
   * @returns
   */
 async function getDoctorInfo (url:string, worksheet:any) {
-  const result = await request(url);
-  const data = getData(result);
-  worksheet.addRows(data)
+  const { data } = await request(url);
+  const result = getData(data);
+  worksheet.addRows(result)
   setColumn(worksheet);
   setRow(worksheet);
-  return data;
+  return result;
 }
 
 // 处理html，返回生成表格需要的数据
@@ -96,16 +96,21 @@ function formatData (data:any) {
     const period = row[1];
     for (let i = 2; i < row.length; i++) {
       const doctorName = row[i];
+      const date = formatDate(weekDic[i]);
       if (doctorName === '—') {
         continue;
       } else if (doctorName.includes('、')) {
         doctorName.split('、').forEach((doctor:any) => {
-          result.push([facultyName, period, weekDic[i], doctor]);
+          result.push([facultyName, period, date, doctor]);
         });
       } else {
-        result.push([facultyName, period, weekDic[i], doctorName]);
+        result.push([facultyName, period, date, doctorName]);
       }
     }
   }
   return result;
+}
+
+function formatDate (date: string) {
+  return date.replace(/(\d{4})\.(\d{2})\.(\d{2}).*/, '$1-$2-$3');
 }

@@ -1,9 +1,10 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
-import { EHospitalName, EHospitalDic } from '../src/enum/EHospital';
-import IHospital, { hospitalKey } from '../src/interface/IHospital';
+import { EHospitalDic } from '../src/enum/EHospital';
+import { hospitalKey } from '../src/interface/IHospital';
 import { creater, isSameDay } from '../src/util';
+import hospitalList from '../data/hospitalList'
 
 const router = express.Router();
 
@@ -14,17 +15,6 @@ router.get('/index.html', (req, res) => {
 
 // 获取医院列表
 router.get('/hospitalList', (req, res) => {
-  // 医院列表
-  const hospitalList: IHospital[] = [
-    {
-      key: 'beijingxieheyiyuan',
-      name: EHospitalName.北京协和医院
-    },
-    {
-      key: 'zhongriyouhaoyiyuan',
-      name: EHospitalName.中日友好医院
-    }
-  ];
   const result = {
     errorCode: 0,
     data: hospitalList,
