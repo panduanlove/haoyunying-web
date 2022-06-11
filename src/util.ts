@@ -1,23 +1,19 @@
-import https from 'https';
+import axios from 'axios';
 import { hospitalKey } from './interface/IHospital';
+import IRequestOptions from './interface/IRequestOptions'
 import createBeijingxieheyiyuan from './crawler/beijingxieheyiyuan';
 import createZhongriyouhaoyiyuan from './crawler/zhongriyouhaoyiyuan';
+import createWuhantongjiyiyuan from './crawler/wuhantongjiyiyuan';
 
-export function request (url:string) {
-  return new Promise(function (resolve) {
-    https.get(url, function (res) {
-      // 分段返回的 自己拼接
-      let data = '';
-      // 有数据产生的时候 拼接
-      res.on('data', function (chunk) {
-        data += chunk;
-      });
-      // 拼接完成
-      res.on('end', function () {
-        resolve(data);
-      });
-    });
-  });
+export function request (url:string, options?: IRequestOptions) {
+  const params = {
+    url,
+    method: 'get'
+  }
+  if (options) {
+    Object.assign(params, options);
+  }
+  return axios(params)
 }
 
 /**
@@ -35,10 +31,39 @@ export function isSameDay (dateA: Date, dateB: Date) {
 
 const createrMap = {
   beijingxieheyiyuan: createBeijingxieheyiyuan,
-  zhongriyouhaoyiyuan: createZhongriyouhaoyiyuan
+  zhongriyouhaoyiyuan: createZhongriyouhaoyiyuan,
+  wuhantongjiyiyuan: createWuhantongjiyiyuan
 }
 
 // 生成各医院表格的工厂方法
 export function creater (hospitalKey: hospitalKey) {
   return createrMap[hospitalKey];
+}
+
+export function formatDate (date:any, fmt:any) {
+  if (date && !date.length) {
+    if (/(y+)/.test(fmt)) {
+      fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+    }
+    const o:any = {
+      'M+': date.getMonth() + 1,
+      'd+': date.getDate(),
+      'h+': date.getHours(),
+      'm+': date.getMinutes(),
+      's+': date.getSeconds()
+    }
+    for (const k in o) {
+      if (new RegExp(`(${k})`).test(fmt)) {
+        const str = o[k] + ''
+        fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? str : padLeftZero(str))
+      }
+    }
+    return fmt
+  } else {
+    return date;
+  }
+}
+
+function padLeftZero (str:string) {
+  return ('00' + str).substr(str.length)
 }
