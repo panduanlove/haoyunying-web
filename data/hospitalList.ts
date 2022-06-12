@@ -13,6 +13,10 @@ const hospitalList: IHospital[] = [
   {
     key: 'wuhantongjiyiyuan',
     name: EHospitalName.武汉同济医院
+  },
+  {
+    key: 'beijingdaxuedisanyiyuan',
+    name: EHospitalName.北京大学第三医院
   }
 ];
 

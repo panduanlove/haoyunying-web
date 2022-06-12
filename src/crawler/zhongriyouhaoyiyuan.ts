@@ -1,10 +1,11 @@
 /**
  * 中日友好医院医生出诊时间表
  */
-import { request, formatDate } from '../util';
+import { formatDate } from '../util';
 import { EHospitalName } from '../enum/EHospital'
 import { createWorksheet, setRow } from '../worksheet';
 import IWooksheetDic from '../interface/IWooksheetDIc';
+import axios from 'axios';
 
 const periodDic: {[key: string]: string} = {
   1: '上午',
@@ -32,12 +33,12 @@ async function getData (hosCode:string, worksheet:any) {
     ['科室', '时间', '日期', '医生', '是否停诊']
   ];
   const promises = [];
-  const { data } = await request(`${hospitalPlaceUrl}?hosCode=${hosCode}`);
+  const { data } = await axios.get(`${hospitalPlaceUrl}?hosCode=${hosCode}`);
   // 获取科室列表
   const { data: facultyList } = data;
   for (const faculty of facultyList) {
     promises.push(
-      request(`${clinicUrl}?hosCode=${faculty.hospitalcode}&depCode=${faculty.code1}`)
+      axios.get(`${clinicUrl}?hosCode=${faculty.hospitalcode}&depCode=${faculty.code1}`)
     );
   }
   const datas = await Promise.all(promises);

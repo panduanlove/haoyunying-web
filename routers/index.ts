@@ -3,7 +3,8 @@ import path from 'path';
 import fs from 'fs';
 import { EHospitalDic } from '../src/enum/EHospital';
 import { hospitalKey } from '../src/interface/IHospital';
-import { creater, isSameDay } from '../src/util';
+import { isSameDay } from '../src/util';
+import creater from '../src/creater';
 import hospitalList from '../data/hospitalList'
 
 const router = express.Router();
