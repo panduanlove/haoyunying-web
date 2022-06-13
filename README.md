@@ -7,3 +7,4 @@
 | 北京协和医院 | https://www.pumch.cn/visitinfo.html |  |
 | 中日友好医院 | https://www.zryhyy.com.cn/zryh/c100012/jyzn_czxx.shtml |  |
 | 武汉同济医院 | https://www.tjh.com.cn/MedicalService/guide.html |  |
+| 北京大学第三医院 | https://zhcx.puh3.net.cn:8081/index.php/seek/ctz |  |

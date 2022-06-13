@@ -1,21 +1,3 @@
-import axios from 'axios';
-import { hospitalKey } from './interface/IHospital';
-import IRequestOptions from './interface/IRequestOptions'
-import createBeijingxieheyiyuan from './crawler/beijingxieheyiyuan';
-import createZhongriyouhaoyiyuan from './crawler/zhongriyouhaoyiyuan';
-import createWuhantongjiyiyuan from './crawler/wuhantongjiyiyuan';
-
-export function request (url:string, options?: IRequestOptions) {
-  const params = {
-    url,
-    method: 'get'
-  }
-  if (options) {
-    Object.assign(params, options);
-  }
-  return axios(params)
-}
-
 /**
  * 判断两个日期是否是同一天
  * @param dateA
@@ -27,17 +9,6 @@ export function isSameDay (dateA: Date, dateB: Date) {
   return [getFullYear, getMonth, getDate].every(fn => {
     return fn.call(dateA) === fn.call(dateB)
   })
-}
-
-const createrMap = {
-  beijingxieheyiyuan: createBeijingxieheyiyuan,
-  zhongriyouhaoyiyuan: createZhongriyouhaoyiyuan,
-  wuhantongjiyiyuan: createWuhantongjiyiyuan
-}
-
-// 生成各医院表格的工厂方法
-export function creater (hospitalKey: hospitalKey) {
-  return createrMap[hospitalKey];
 }
 
 export function formatDate (date:any, fmt:any) {

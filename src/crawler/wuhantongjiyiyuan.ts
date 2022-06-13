@@ -1,7 +1,7 @@
 /**
- * 中日友好医院医生出诊时间表
+ * 武汉同济医院医生出诊时间表
  */
-import { request } from '../util';
+import axios from 'axios'
 import { EHospitalName } from '../enum/EHospital'
 import { createWorksheet, setColumn, setRow } from '../worksheet';
 import IWooksheetDic from '../interface/IWooksheetDIc'
@@ -32,12 +32,12 @@ async function getData (hospitalCode:string, worksheet:any) {
     ['科室', '时间', '日期', '医生']
   ];
   const promises = [];
-  const { data } = await request(url, { method: 'post' });
+  const { data } = await axios.post(url);
   // 获取科室列表
   const { data: facultyList } = data;
   for (const faculty of facultyList) {
     promises.push(
-      request(`${clinicUrl}?Hospital=${hospitalCode}&BelongClinicCode=${faculty.belongcliniccode}`, { method: 'post' })
+      axios.post(`${clinicUrl}?Hospital=${hospitalCode}&BelongClinicCode=${faculty.belongcliniccode}`)
     );
   }
   const datas = await Promise.all(promises);

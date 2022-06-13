@@ -3,7 +3,7 @@
  */
 import cheerio from 'cheerio';
 import { createWorksheet, setColumn, setRow } from '../worksheet';
-import { request } from '../util';
+import axios from 'axios';
 import { EHospitalName } from '../enum/EHospital';
 import IWooksheetDic from '../interface/IWooksheetDIc'
 
@@ -28,7 +28,7 @@ export default function creater () {
   * @returns
   */
 async function getDoctorInfo (url:string, worksheet:any) {
-  const { data } = await request(url);
+  const { data } = await axios.get(url);
   const result = getData(data);
   worksheet.addRows(result)
   setColumn(worksheet);
